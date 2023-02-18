@@ -71,7 +71,7 @@
 </script>
 
 {#if isRecording}
-	<div>Recording: {recordingTime}</div>
+	<div class="record-panel">Recording: <strong>{parseTime(recordingTime)}</strong></div>
 {/if}
 
 {#if $recordings}
@@ -105,6 +105,14 @@
 {/if}
 
 <style>
+	.record-panel {
+		background-color: #e3817a;
+		padding: 1rem;
+		border-radius: 4px;
+		width: fit-content;
+		margin: 0 auto;
+	}
+
 	ul {
 		list-style: none;
 		padding: 0;
