@@ -9,17 +9,23 @@ specifiers:
   '@types/cookie': ^0.5.1
   '@typescript-eslint/eslint-plugin': ^5.45.0
   '@typescript-eslint/parser': ^5.45.0
+  dexie: ^3.2.3
   eslint: ^8.28.0
   eslint-config-prettier: ^8.5.0
   eslint-plugin-svelte3: ^4.0.0
   prettier: ^2.8.0
   prettier-plugin-svelte: ^2.8.1
+  serina: 2.0.0-alpha.2
   svelte: ^3.54.0
   svelte-check: ^3.0.1
   tslib: ^2.4.1
   typescript: ^4.9.3
   vite: ^4.0.0
   vitest: ^0.25.3
+
+dependencies:
+  dexie: 3.2.3
+  serina: 2.0.0-alpha.2
 
 devDependencies:
   '@fontsource/fira-mono': 4.5.10
@@ -764,6 +770,11 @@ packages:
   /devalue/4.3.0:
     resolution: {integrity: sha512-n94yQo4LI3w7erwf84mhRUkUJfhLoCZiLyoOZ/QFsDbcWNZePrLwbQpvZBUG2TNxwV3VjCKPxkiiQA6pe3TrTA==}
     dev: true
+
+  /dexie/3.2.3:
+    resolution: {integrity: sha512-iHayBd4UYryDCVUNa3PMsJMEnd8yjyh5p7a+RFeC8i8n476BC9wMhVvqiImq5zJZJf5Tuer+s4SSj+AA3x+ZbQ==}
+    engines: {node: '>=6.0'}
+    dev: false
 
   /dir-glob/3.0.1:
     resolution: {integrity: sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==}
@@ -1542,6 +1553,11 @@ packages:
     dependencies:
       lru-cache: 6.0.0
     dev: true
+
+  /serina/2.0.0-alpha.2:
+    resolution: {integrity: sha512-N1Zb82bdGrPC1psc7ae5ZdIDWMwEymsnUcH7vtAnmwCT3QlO0Esx1+zdVRrCZqWyIeHipgRGMjaAHfHA3CY3cQ==}
+    engines: {node: '>=18', pnpm: '>=7'}
+    dev: false
 
   /set-cookie-parser/2.5.1:
     resolution: {integrity: sha512-1jeBGaKNGdEq4FgIrORu/N570dwoPYio8lSoYLWmX7sQ//0JY08Xh9o5pBcgmHQ/MbsYp/aZnOe1s1lIsbLprQ==}

@@ -1,59 +1,149 @@
-<script>
-	import Counter from './Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcome_fallback from '$lib/images/svelte-welcome.png';
+<script lang="ts">
+	import { liveQuery } from 'dexie';
+	import { db } from './database';
+	import { browser } from '$app/environment';
+	import StartRecord from '../icons/StartRecord.svelte';
+	import StopRecord from '../icons/StopRecord.svelte';
+	import { isEditingMode } from '../store';
+
+	let showControls: boolean;
+	$: recordings = liveQuery(() => (browser ? db.trackedTime.toArray() : []));
+	let isRecording = false;
+	let recordingTime = 0;
+	let timer: NodeJS.Timer;
+
+	isEditingMode.subscribe((value) => {
+		showControls = value;
+	});
+
+	function increaseTimer() {
+		recordingTime += 1;
+	}
+
+	function startRecording() {
+		isRecording = true;
+		timer = setInterval(increaseTimer, 1000);
+	}
+
+	function stopRecording() {
+		isRecording = false;
+		db.trackedTime.add({
+			seconds: recordingTime,
+			date: new Date()
+		});
+		recordingTime = 0;
+		clearInterval(timer);
+	}
+
+	function deleteRecording(id: number) {
+		db.trackedTime.delete(id);
+	}
+
+	function parseTime(value: number) {
+		const hours = Math.floor(value / 3600);
+		const minutes = Math.floor((value % 3600) / 60);
+		const seconds = value % 60;
+
+		return formatTime(hours, minutes, seconds);
+	}
+
+	function formatTime(hours: number, minutes: number, seconds: number) {
+		const hourString = hours < 10 ? `0${hours}` : hours;
+		const minuteString = minutes < 10 ? `0${minutes}` : minutes;
+		const secondString = seconds < 10 ? `0${seconds}` : seconds;
+
+		return `${hourString}:${minuteString}:${secondString}`;
+	}
+
+	function formatDate(date: Date) {
+		const day = date.getDate();
+		const month = date.getMonth() + 1;
+		const year = date.getFullYear();
+		const hours = date.getHours();
+		const minutes = date.getMinutes();
+		const seconds = date.getSeconds();
+
+		const dayString = day < 10 ? `0${day}` : day;
+		const monthString = month < 10 ? `0${month}` : month;
+
+		return `${year}/${monthString}/${dayString} ${formatTime(hours, minutes, seconds)}`;
+	}
 </script>
 
-<svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
-</svelte:head>
+{#if isRecording}
+	<div>Recording: {recordingTime}</div>
+{/if}
 
-<section>
-	<h1>
-		<span class="welcome">
-			<picture>
-				<source srcset={welcome} type="image/webp" />
-				<img src={welcome_fallback} alt="Welcome" />
-			</picture>
-		</span>
+{#if $recordings}
+	<ul>
+		{#each $recordings as recording (recording.id)}
+			<li>
+				<div class="card-content">
+					<strong>{formatDate(recording.date)}</strong>
+					<span>{parseTime(recording.seconds)}</span>
+				</div>
 
-		to your new<br />SvelteKit app
-	</h1>
+				{#if showControls}
+					<div class="card-controls">
+						<!-- <button>Edit</button> -->
+						<button on:click={() => deleteRecording(recording.id)}>Delete</button>
+					</div>
+				{/if}
+			</li>
+		{/each}
+	</ul>
+{/if}
 
-	<h2>
-		try editing <strong>src/routes/+page.svelte</strong>
-	</h2>
-
-	<Counter />
-</section>
+{#if isRecording}
+	<div class="control">
+		<button on:click={stopRecording}><StopRecord /></button>
+	</div>
+{:else}
+	<div class="control">
+		<button on:click={startRecording}><StartRecord /></button>
+	</div>
+{/if}
 
 <style>
-	section {
+	ul {
+		list-style: none;
+		padding: 0;
+		margin: 0 auto;
+		width: 400px;
+	}
+
+	ul > li {
+		display: flex;
+		justify-content: space-between;
+		background-color: antiquewhite;
+		margin: 1rem;
+		padding: 1rem;
+		border-radius: 4px;
+		box-shadow: var(--shadow-level-1);
+	}
+
+	ul > li .card-content {
 		display: flex;
 		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	ul > li .card-controls {
+		display: flex;
+		gap: 0.5rem;
+	}
+
+	.control {
+		position: fixed;
+		width: calc(100% - 162px);
+		bottom: 5rem;
+		display: flex;
 		justify-content: center;
 		align-items: center;
-		flex: 0.6;
 	}
 
-	h1 {
-		width: 100%;
-	}
-
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
+	.control button {
+		background-color: unset;
+		border: none;
 	}
 </style>
