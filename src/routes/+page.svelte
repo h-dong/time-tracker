@@ -135,7 +135,7 @@
 
 	.control {
 		position: fixed;
-		width: calc(100% - 162px);
+		width: 64rem;
 		bottom: 5rem;
 		display: flex;
 		justify-content: center;

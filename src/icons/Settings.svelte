@@ -13,4 +13,8 @@
 	svg {
 		cursor: pointer;
 	}
+
+	svg:hover {
+		fill: darkslategray;
+	}
 </style>
