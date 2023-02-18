@@ -143,15 +143,20 @@
 
 	.control {
 		position: fixed;
-		width: 64rem;
-		bottom: 5rem;
-		display: flex;
-		justify-content: center;
-		align-items: center;
+		left: 0;
+		right: 0;
+		text-align: center;
+		bottom: 3rem;
 	}
 
 	.control button {
 		background-color: unset;
 		border: none;
+	}
+
+	@media (max-width: 720px) {
+		.control {
+			width: 100%;
+		}
 	}
 </style>

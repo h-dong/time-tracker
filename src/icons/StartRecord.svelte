@@ -33,6 +33,7 @@
 	svg {
 		cursor: pointer;
 		border-radius: 24px;
+		margin: 2rem;
 		box-shadow: var(--shadow-level-3);
 	}
 
